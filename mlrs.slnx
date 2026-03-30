@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="mlrs/mlrs.vcxproj" Id="8b7bf81f-7651-4ed3-9a5c-38f9c174eb0d" />
+</Solution>
