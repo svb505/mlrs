@@ -20,10 +20,13 @@
 #include "effects.h"
 #include "minimap.h"
 #include "randomCoordinates.h"
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #define WW 1500
 #define WH 900
 #define TotalB 20
+
+#include "texture.h"
 
 Light light;
 Camera camera;
@@ -165,6 +168,8 @@ int main(){
     std::vector<ExplosionEffect*> explosions;
     std::vector<SmokeEffect*> smokes;
     std::vector<Particle> particles;
+
+    LoadAllTextures();
 
     while (!glfwWindowShouldClose(window)){
         ImGui_ImplOpenGL3_NewFrame();

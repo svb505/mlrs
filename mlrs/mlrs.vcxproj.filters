@@ -48,6 +48,9 @@
     <ClCompile Include="randomCoordinates.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="city.h">
@@ -90,6 +93,9 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="randomCoordinates.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

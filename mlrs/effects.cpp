@@ -8,6 +8,8 @@
 #include <chrono>
 #include <cstdlib>
 #include "effects.h"
+#include "texture.h"
+
 
 ExplosionEffect::ExplosionEffect(float x, float y, float z, int count, float durationSec, float radius, float height)
     : centerX(x), centerY(y), centerZ(z), duration(durationSec), elapsedTime(0), finished(false),
@@ -59,38 +61,45 @@ void ExplosionEffect::Update(float dt) {
     }
 }
 void ExplosionEffect::Draw() {
+    GLuint explosionTex = allTextures["fire"];
+
     if (finished) return;
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, explosionTex);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     glPushMatrix();
     glTranslatef(centerX, centerY, centerZ);
 
-    glPointSize(2.0f);
+    glBegin(GL_QUADS);
 
-    glBegin(GL_POINTS);
     for (auto& p : particles) {
         if (p.life > 0.0f) {
-            float intensity = p.life / duration;
-            if (intensity > 1.0f) intensity = 1.0f;
+            float i = p.life / duration;
+            if (i > 1.0f) i = 1.0f;
 
-            float nx = p.x;
-            float ny = p.y;
-            float nz = p.z;
-            float len = sqrt(nx * nx + ny * ny + nz * nz);
-            if (len > 0.0f) {
-                nx /= len;
-                ny /= len;
-                nz /= len;
-            }
-            glNormal3f(nx, ny, nz);
+            float s = 0.2f;
 
-            glColor4f(1.0f, 0.5f, 0.0f, intensity);
-            glVertex3f(p.x, p.y, p.z);
+            glColor4f(1, 1, 1, i);
+
+            glTexCoord2f(0, 0); glVertex3f(p.x - s, p.y - s, p.z);
+            glTexCoord2f(1, 0); glVertex3f(p.x + s, p.y - s, p.z);
+            glTexCoord2f(1, 1); glVertex3f(p.x + s, p.y + s, p.z);
+            glTexCoord2f(0, 1); glVertex3f(p.x - s, p.y + s, p.z);
         }
     }
+
     glEnd();
 
     glPopMatrix();
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
 }
+
 SmokeEffect::SmokeEffect(float x, float y, float z, int count, float r,
     const std::vector<float>& _colors, float _size, float _speed, float hRadius)
     : centerX(x), centerY(y), centerZ(z), radius(r), maxParticles(count), colors(_colors), size(_size),
@@ -124,31 +133,38 @@ void SmokeEffect::Update(float dt) {
     }
 }
 void SmokeEffect::Draw() {
+    GLuint smokeTex = allTextures["smoke"];
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, smokeTex);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor4f(1, 1, 1, 1);
+
     glPushMatrix();
     glTranslatef(centerX, centerY, centerZ);
 
-    glPointSize(size);
+    glBegin(GL_QUADS);
 
-    glBegin(GL_POINTS);
     for (auto& p : particles) {
-        float nx = p.x;
-        float ny = p.y;
-        float nz = p.z;
-        float len = sqrt(nx * nx + ny * ny + nz * nz);
-        if (len > 0.0f) {
-            nx /= len;
-            ny /= len;
-            nz /= len;
-        }
-        glNormal3f(nx, ny, nz);
+        float s = size * 0.1f;
 
-        glColor4f(colors[0], colors[1], colors[2], colors[3]);
-        glVertex3f(p.x, p.y, p.z);
+        glTexCoord2f(0, 0); glVertex3f(p.x - s, p.y - s, p.z);
+        glTexCoord2f(1, 0); glVertex3f(p.x + s, p.y - s, p.z);
+        glTexCoord2f(1, 1); glVertex3f(p.x + s, p.y + s, p.z);
+        glTexCoord2f(0, 1); glVertex3f(p.x - s, p.y + s, p.z);
     }
+
     glEnd();
 
     glPopMatrix();
+
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
 }
+
 void updateExplosions(float dt, std::vector<ExplosionEffect*>& explosions) {
     for (auto it = explosions.begin(); it != explosions.end();) {
         (*it)->Update(dt);

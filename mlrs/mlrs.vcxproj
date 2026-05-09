@@ -138,6 +138,7 @@
     <ClCompile Include="randomCoordinates.cpp" />
     <ClCompile Include="rockets.cpp" />
     <ClCompile Include="text.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="rockets.h" />
     <ClInclude Include="sounds.h" />
     <ClInclude Include="text.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
